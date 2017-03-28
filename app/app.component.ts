@@ -6,12 +6,25 @@ import { Component } from '@angular/core';
   <div class="container">
     <h1>Haute Garbage</h1>
     <h2>Sick Recipes:</h2>
-    <h3>{{firstFood.description}}</h3>
     <ul>
-      <li [class]="ratingColor(firstFood)" (click)="isDone(firstFood)" *ngFor="let firstFood of garbageFoods">{{firstFood.description}}<button (click)="editRecipe()">Click to edit a recipe!</button></li>
-
+      <li [class]="ratingColor(firstFood)" (click)="isDone(firstFood)" *ngFor="let firstFood of garbageFoods">{{firstFood.description}}<button (click)="editRecipe(firstFood)">Click to edit a recipe!</button></li>
     </ul>
-  </div>
+    <div>
+      <div *ngIf="selectedFood">
+        <h3>{{selectedFood.description}}</h3>
+         <p>Task Complete? {{selectedFood.done}}</p>
+        <h3>Edit Recipe</h3>
+        <label>Enter Recipe Description:</label>
+        <input [(ngModel)]="selectedFood.description">
+         <label>Enter Food Score (1-3):</label>
+         <br>
+         <input type="radio" [(ngModel)]="selectedFood.trashScore" [value]="1">1 (Low Score)<br>
+         <input type="radio" [(ngModel)]="selectedFood.trashScore" [value]="2">2 (Medium Score)<br>
+         <input type="radio" [(ngModel)]="selectedFood.trashScore" [value]="3">3 (High Score)<br>
+         <button (click)="finishedEditing()">Done (with you)</button>
+        </div>
+      </div>
+    </div>
   `
 })
 
@@ -22,8 +35,10 @@ export class AppComponent {
     new garbageFood('I am Upset.', 1),
   ];
 
-  editRecipe() {
-    alert("You can't");
+  selectedFood = null;
+
+  editRecipe(clickedFood) {
+    this.selectedFood = clickedFood;
   }
 
   isDone(clickedFood: garbageFood) {
@@ -42,6 +57,10 @@ export class AppComponent {
     } else {
       return "bg-info";
     }
+  }
+
+  finishedEditing() {
+    this.selectedFood = null;
   }
 }
 
